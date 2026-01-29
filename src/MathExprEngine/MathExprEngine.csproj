@@ -11,7 +11,9 @@
 		<NoWarn>$(NoWarn);CS8032</NoWarn>
 		<EnableNETAnalyzers>false</EnableNETAnalyzers>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-		<PackageTags></PackageTags>
+		<PackageTags>
+			Expression;Calculator;Evaluator;ast;parser;math;evaluation;functions;Rule-Engine;expression-evaluator
+		</PackageTags>
 		<RepositoryUrl>https://github.com/I-RzR-I/MathExprEngine</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/I-RzR-I/MathExprEngine</PackageProjectUrl>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
