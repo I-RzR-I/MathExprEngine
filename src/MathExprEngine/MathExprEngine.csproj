@@ -17,8 +17,8 @@
 		<RepositoryUrl>https://github.com/I-RzR-I/MathExprEngine</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/I-RzR-I/MathExprEngine</PackageProjectUrl>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-		<PackageDescription></PackageDescription>
-		<Summary></Summary>
+		<PackageDescription>Configurable .NET expression engine for rules and formulas, featuring AST parsing, short-circuit logic, and ternary conditionals.</PackageDescription>
+		<Summary>Configurable .NET expression engine for rules and formulas, featuring AST parsing, short-circuit logic, and ternary conditionals.</Summary>
 		<PackageTitle>RzR.Shared.Entity (MathExprEngine)</PackageTitle>
 		<Title>RzR.Shared.Entity (MathExprEngine)</Title>
 		<LangVersion>latest</LangVersion>

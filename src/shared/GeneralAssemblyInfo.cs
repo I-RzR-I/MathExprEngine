@@ -31,7 +31,7 @@ using System.Resources;
 [assembly: AssemblyProduct("MathExprEngine")]
 [assembly: AssemblyCopyright("Copyright © 2022-2026 RzR All rights reserved.")]
 [assembly: AssemblyTrademark("® RzR™")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Configurable .NET expression engine for rules and formulas, featuring AST parsing, short-circuit logic, and ternary conditionals.")]
 
 #if NET45_OR_GREATER || NET || NETSTANDARD
 [assembly: AssemblyMetadata("TermsOfService", "")]
