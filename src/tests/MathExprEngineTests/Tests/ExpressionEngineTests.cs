@@ -16,7 +16,6 @@
 
 using MathExprEngine;
 using System;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace MathExprEngineTests.Tests
 {
@@ -234,7 +233,7 @@ namespace MathExprEngineTests.Tests
             }
             catch (Exception ex)
             {
-                Assert.AreEqual("Error: Unexpected token '*' at column 5", ex.Message);
+                Assert.AreEqual("Error: Syntax error at column 5. Message: Unexpected token '*'", ex.Message);
             }
         }
     }

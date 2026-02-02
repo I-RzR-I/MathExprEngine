@@ -20,7 +20,7 @@ The engine intentionally avoids scripting engines, or `eval`-style execution, gi
 
 ## What Problems Does It Solve?
 
-Typical real-world problems:
+Typical problems:
 
 * 🔧 **Business rules** stored as expressions in configuration or database
 * 📊 **Dynamic calculations** (pricing formulas, scoring systems, validation rules)
@@ -110,18 +110,14 @@ This keeps the engine simple and interoperable with math-heavy formulas.
 
 ---
 
-## Architecture Overview
+## Execution Overview
 
 ```text
 Expression String
-       ↓
-   Tokenizer
-       ↓
-     Parser
-       ↓
-   AST Nodes
-       ↓
-   Evaluation
+    ↳ Tokenizer
+        ↳ Parser
+            ↳ AST Nodes     
+                ↳ Evaluation
 ```
 
 * **Tokenizer**: converts text into tokens with column tracking
