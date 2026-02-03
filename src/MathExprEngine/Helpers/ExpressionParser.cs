@@ -140,7 +140,7 @@ namespace MathExprEngine.Helpers
             {
                 var token = Peek();
 
-                throw new MathRuleEngineException(messageIfFail.IfNullOrWhiteSpace($"Expected {kind}, found {token.Kind}"), token.Column);
+                throw new ExpressionSyntaxException(messageIfFail.IfNullOrWhiteSpace($"Expected {kind}, found {token.Kind}"), token.Column);
             }
         }
 
@@ -476,7 +476,7 @@ namespace MathExprEngine.Helpers
                 }
 
                 // We treat bare identifiers as error (we only support functions)
-                throw new MathRuleEngineException(
+                throw new ExpressionSyntaxException(
                     $"Unexpected identifier '{id.Text}' (functions must be called like name(...))", id.Column);
             }
 
@@ -493,7 +493,7 @@ namespace MathExprEngine.Helpers
             // Unexpected token
             var peekedToken = Peek();
 
-            throw new MathRuleEngineException($"Unexpected token '{peekedToken.Text}'", peekedToken.Column);
+            throw new ExpressionSyntaxException($"Unexpected token '{peekedToken.Text}'", peekedToken.Column);
         }
     }
 }

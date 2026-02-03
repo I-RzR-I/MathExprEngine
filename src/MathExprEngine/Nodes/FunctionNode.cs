@@ -68,7 +68,7 @@ namespace MathExprEngine.Nodes
         public override double Evaluate(MathRuleEngine ctx)
         {
             if (!ctx.Functions.TryGetValue(_name, out var impl))
-                throw new MathRuleEngineException(DefaultMessages.UnknownFunction.FormatWith(_name), Column);
+                throw new ExpressionFunctionException(DefaultMessages.UnknownFunction.FormatWith(_name), Column);
 
             var evaluated = new double[_args.Count];
             for (var i = 0; i < _args.Count; i++)
@@ -80,7 +80,7 @@ namespace MathExprEngine.Nodes
             }
             catch (Exception ex)
             {
-                throw new MathRuleEngineException(DefaultMessages.FunctionError.FormatWith(_name, ex.Message), Column);
+                throw new ExpressionFunctionException(DefaultMessages.FunctionError.FormatWith(_name, ex.Message), Column);
             }
         }
     }

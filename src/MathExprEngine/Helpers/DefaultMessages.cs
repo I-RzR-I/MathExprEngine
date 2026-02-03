@@ -19,8 +19,8 @@ namespace MathExprEngine.Helpers
     internal static class DefaultMessages
     {
         public const string FuncNameIsMissing = "The function name is required!";
-        public const string UnknownFunction = "Unknown function: '{0}'!";
-        public const string FunctionError = "Error in function: '{0}'. Error: {1}!";
+        public const string UnknownFunction = "Unknown function: {0}!";
+        public const string FunctionError = "Error in function: {0}. Error: {1}!";
 
         public const string FunctionExpectsXArgs = "The function {0} expects {1} arguments";
         public const string FunctionExpectsXArg = "The function {0} expects {1} argument";
@@ -31,10 +31,14 @@ namespace MathExprEngine.Helpers
         public const string MathRuleEngineEx = "Error: {0}";
         
         public const string TokenInvalidNumericMultipleDot = "Invalid numeric literal (multiple '.')";
-        public const string TokenInvalidNumber = "Invalid number '{0}'";
-        public const string TokenUnexpectedCharacter = "Unexpected character '{0}'";
+        public const string TokenInvalidNumber = "Invalid number {0}";
+        public const string TokenUnexpectedCharacter = "Unexpected character {0}";
 
-        public const string UnknownBinaryOperator = "Unknown binary operator: '{0}'!";
+        public const string UnknownBinaryOperator = "Unknown binary operator: {0}!";
+
+        public const string SyntaxExAtColumn = "Error: Syntax error at column {0}";
+        public const string SyntaxExAtColumnWithMessage = "Error: Syntax error at column {0}. Message: {1}";
+        public const string SyntaxEx = "Error: {0}";
     }
 }
 

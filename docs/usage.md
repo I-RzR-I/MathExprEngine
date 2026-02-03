@@ -103,7 +103,7 @@ try
 {
     calc.Evaluate("2 + * 3");
 }
-catch (Calculator.CalculatorException ex)
+catch (ExpressionSyntaxException ex)
 {
     Console.WriteLine(ex.Message);
 }
@@ -142,14 +142,3 @@ basePrice * (isVip && quantity > 10 ? 0.8 : 1.0)
 ```text
 (userGroup > 3 && betaEnabled) ? 1 : 0
 ```
-
----
-
-## Why This Math expression parses Is Helpful
-
-* ✅ Deterministic and safe
-* ✅ No runtime code execution
-* ✅ Clear error diagnostics
-* ✅ Extensible function system
-* ✅ Short-circuit semantics
-* ✅ Ideal base for a DSL or rule engine

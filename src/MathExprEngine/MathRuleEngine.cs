@@ -126,7 +126,7 @@ namespace MathExprEngine
             var next = tokens[parser.Pos];
 
             if (next.Kind != TokenKind.EndOfText)
-                throw new MathRuleEngineException(DefaultMessages.UnexceptedTokenAtTheEnd.FormatWith(next.Text), next.Column);
+                throw new ExpressionSyntaxException(DefaultMessages.UnexceptedTokenAtTheEnd.FormatWith(next.Text), next.Column);
 
             return ast.Evaluate(this);
         }
