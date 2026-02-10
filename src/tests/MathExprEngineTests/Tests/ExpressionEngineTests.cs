@@ -222,6 +222,8 @@ namespace MathExprEngineTests.Tests
 
             Assert.AreEqual(1.0, _calc.Evaluate("(80 > 90) ? 1.5 : 1.0")); // 1.0
             Assert.AreEqual(1, _calc.Evaluate("(18 >= 18 && 1 == 1) ? 1 : 0")); // 1
+
+            Assert.AreEqual(7.12, _calc.Evaluate("1.01 + 1.11 + 5"));
         }
 
         [TestMethod]
@@ -235,6 +237,14 @@ namespace MathExprEngineTests.Tests
             {
                 Assert.AreEqual("Error: Syntax error at column 5. Message: Unexpected token '*'", ex.Message);
             }
+        }
+
+        [TestMethod]
+        public void TestMethod_Execute_TernSumCondition_Func()
+        {
+           var result = _calc.Evaluate("((1>0) && (12 > 4) && (8<9)) ? sum(1, 2, 3)/3 : -48");
+           
+           Assert.AreEqual(2, result);
         }
     }
 }
