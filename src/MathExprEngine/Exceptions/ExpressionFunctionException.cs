@@ -68,7 +68,7 @@ namespace MathExprEngine.Exceptions
         private static string FormatMessage(string message, int column)
         {
             return column >= 0
-                ? DefaultMessages.SyntaxExAtColumnWithMessage.FormatWith(message, column + 1)
+                ? DefaultMessages.SyntaxExAtColumnWithMessage.FormatWith(column + 1, message)
                 : DefaultMessages.SyntaxEx.FormatWith(message);
         }
     }
