@@ -102,14 +102,21 @@ namespace MathExprEngine.Helpers
                 if (char.IsLetter(c).IsTrue())
                 {
                     var start = i;
-                    while (i < n && char.IsLetter(sourceExpression[i])) 
+                    while (i < n && (char.IsLetterOrDigit(sourceExpression[i]) || sourceExpression[i] == '_'))
                         i++;
 
                     var name = sourceExpression.Substring(start, i - start);
+                    var nextNonSpace = i;
+                    while (nextNonSpace < n && char.IsWhiteSpace(sourceExpression[nextNonSpace]))
+                        nextNonSpace++;
+
+                    var kind = (nextNonSpace < n && sourceExpression[nextNonSpace] == '(')
+                        ? TokenKind.Identifier   // function call follows
+                        : TokenKind.ParamVariable;    // bare name → variable
 
                     tokens.Add(new ExpressionToken
                     {
-                        Kind = TokenKind.Identifier, 
+                        Kind = kind,
                         Text = name,
                         Column = col
                     });

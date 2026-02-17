@@ -46,6 +46,14 @@ namespace MathExprEngine
 
         /// -------------------------------------------------------------------------------------------------
         /// <summary>
+        ///     (Immutable) the parameters (variables).
+        /// </summary>
+        /// =================================================================================================
+        internal readonly Dictionary<string, object> Parameters =
+            new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+
+        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
         ///     The instance.
         /// </summary>
         /// =================================================================================================
@@ -104,31 +112,52 @@ namespace MathExprEngine
         /// <summary>
         ///     Evaluate the math expression.
         /// </summary>
-        /// <exception cref="ArgumentException" />
-        /// <exception cref="MathRuleEngineException" />
+        /// <exception cref="ExpressionSyntaxException">.</exception>
+        /// <exception cref="ArgumentException">.</exception>
         /// <param name="expression">The expression.</param>
+        /// <param name="parameters">
+        ///     (Optional)
+        ///     (Immutable) the parameters (variables).
+        /// </param>
         /// <returns>
         ///     A expression evaluation result (double value).
         /// </returns>
         /// =================================================================================================
-        public double Evaluate(string expression)
+        public double Evaluate(string expression, IDictionary<string, object> parameters = null)
         {
             DomainEnsure.IsNotNullOrEmpty(expression, nameof(expression));
 
-            // Tokenize
-            var tokens = ExpressionTokenizer.Tokenize(expression);
+            try
+            {
+                Parameters.Clear();
+                if (parameters.IsNotNullOrEmptyEnumerable())
+                {
+                    parameters.NotNull()
+                        .ForEach(pair =>
+                        {
+                            Parameters.AddOrUpdate(pair.Key, pair.Value);
+                        });
+                }
 
-            // Parse
-            var parser = new ExpressionParser(tokens);
-            var ast = parser.ParseExpression();
+                // Tokenize
+                var tokens = ExpressionTokenizer.Tokenize(expression);
 
-            // Ensure we consumed all tokens (except EndOfText)
-            var next = tokens[parser.Pos];
+                // Parse
+                var parser = new ExpressionParser(tokens);
+                var ast = parser.ParseExpression();
 
-            if (next.Kind != TokenKind.EndOfText)
-                throw new ExpressionSyntaxException(DefaultMessages.UnexceptedTokenAtTheEnd.FormatWith(next.Text), next.Column);
+                // Ensure we consumed all tokens (except EndOfText)
+                var next = tokens[parser.Pos];
 
-            return ast.Evaluate(this);
+                if (next.Kind != TokenKind.EndOfText)
+                    throw new ExpressionSyntaxException(DefaultMessages.UnexceptedTokenAtTheEnd.FormatWith(next.Text), next.Column);
+
+                return ast.Evaluate(this);
+            }
+            finally
+            {
+                Parameters.Clear();
+            }
         }
     }
 }

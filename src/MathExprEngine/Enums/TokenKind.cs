@@ -126,6 +126,11 @@ namespace MathExprEngine.Enums
         /// <summary>
         ///     An enum constant representing the end of text option.
         /// </summary>
-        EndOfText
+        EndOfText,
+
+        /// <summary>
+        ///     An enum constant representing the Parameter variable option.
+        /// </summary>
+        ParamVariable
     }
 }
