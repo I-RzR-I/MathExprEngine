@@ -480,6 +480,13 @@ namespace MathExprEngine.Helpers
                     $"Unexpected identifier '{id.Text}' (functions must be called like name(...))", id.Column);
             }
 
+            if (Match(TokenKind.ParamVariable).IsTrue())
+            {
+                var id = _tokens[Pos - 1];
+
+                return new ParameterNode(id.Text, id.Column);
+            }
+
             if (Match(TokenKind.LParen).IsTrue())
             {
                 var start = _tokens[Pos - 1];
