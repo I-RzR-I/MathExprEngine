@@ -57,5 +57,30 @@ namespace MathExprEngineTests.Tests
                 _engine.Evaluate("unknown(1)")
             );
         }
+
+        [TestMethod]
+        [DataRow(2d, "5,3")]
+        [DataRow(0d, "2,1")]
+        [DataRow(1d, "10,3")]
+        [DataRow(1d, "sum(4,4,2),3")]
+        [DataRow(-2d, "-5,3")]
+        [DataRow(-2d, "-5,-3")]
+        [DataRow(2d, "5,-3")]
+        [DataRow(1.5d, "5.5,2")]
+        [DataRow(0d, "max(2,5),5")]
+        public void BuiltInFunctions_Mod_Work_Test(double result, string moduloTest)
+        {
+            Assert.AreEqual(result, _engine.Evaluate($"mod({moduloTest})"), 0.000000001d);
+        }
+
+        [TestMethod]
+        [DataRow("mod(1)")]
+        [DataRow("mod(1,2,3)")]
+        public void BuiltInFunctions_Mod_InvalidArgumentCount_ShouldThrow_Test(string expression)
+        {
+            Assert.ThrowsException<ExpressionFunctionException>(() =>
+                _engine.Evaluate(expression)
+            );
+        }
     }
 }

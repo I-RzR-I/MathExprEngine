@@ -102,6 +102,15 @@ namespace MathExprEngine.Helpers
 
                         return -args[0];
                     }
+                },
+                {
+                    "mod", args =>
+                    {
+                        if (args.Length != 2)
+                            throw new FunctionArgumentException("mod", 2);
+
+                        return args[0] % args[1];
+                    }
                 }
             };
 

@@ -89,6 +89,20 @@ namespace MathExprEngine.Helpers
 
         /// -------------------------------------------------------------------------------------------------
         /// <summary>
+        ///     Returns the object at a position offset from 'Pos'.
+        /// </summary>
+        /// <param name="offset">The offset.</param>
+        /// <returns>
+        ///     The token at the requested offset.
+        /// </returns>
+        /// =================================================================================================
+        private ExpressionToken Peek(int offset)
+        {
+            return _tokens[Pos + offset];
+        }
+
+        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
         ///     Move to the next item in the collection.
         /// </summary>
         /// <returns>
@@ -334,7 +348,7 @@ namespace MathExprEngine.Helpers
         ///     Parse multiplicative.
         /// </summary>
         /// <remarks>
-        ///     multiplicative := power ( ('*' | '/') power )*
+        ///     multiplicative := power ( ('*' | '/' | '%') power )*
         /// </remarks>
         /// <returns>
         ///     A NodeBase.
@@ -360,6 +374,15 @@ namespace MathExprEngine.Helpers
                     var right = ParsePower();
 
                     node = new BinaryNode("/", node, right, opToken.Column);
+                    continue;
+                }
+
+                if (Match(TokenKind.Percentage).IsTrue())
+                {
+                    var opToken = _tokens[Pos - 1];
+                    var right = ParsePower();
+
+                    node = new BinaryNode("%", node, right, opToken.Column);
                     continue;
                 }
 
@@ -423,7 +446,70 @@ namespace MathExprEngine.Helpers
                 return new UnaryNode("-", operand, opToken.Column);
             }
 
-            return ParsePrimary();
+            return ParsePostfix();
+        }
+
+        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
+        ///     Parse postfix.
+        /// </summary>
+        /// <remarks>
+        ///     postfix := primary ('%')*
+        /// </remarks>
+        /// <returns>
+        ///     A Node.
+        /// </returns>
+        /// =================================================================================================
+        private NodeBase ParsePostfix()
+        {
+            var node = ParsePrimary();
+
+            while (Peek().Kind == TokenKind.Percentage && IsPostfixPercentage().IsTrue())
+            {
+                var opToken = Next();
+                node = new UnaryNode("%", node, opToken.Column);
+            }
+
+            return node;
+        }
+
+        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
+        ///     Determine if the current percentage token should be treated as a postfix operator.
+        /// </summary>
+        /// <returns>
+        ///     True if it succeeds, false if it fails.
+        /// </returns>
+        /// =================================================================================================
+        private bool IsPostfixPercentage()
+        {
+            var nextKind = Peek(1).Kind;
+
+            switch (nextKind)
+            {
+                case TokenKind.EndOfText:
+                case TokenKind.RParen:
+                case TokenKind.Comma:
+                case TokenKind.Question:
+                case TokenKind.Colon:
+                case TokenKind.Plus:
+                case TokenKind.Minus:
+                case TokenKind.Star:
+                case TokenKind.Slash:
+                case TokenKind.Caret:
+                case TokenKind.Less:
+                case TokenKind.Greater:
+                case TokenKind.LessEqual:
+                case TokenKind.GreaterEqual:
+                case TokenKind.EqualEqual:
+                case TokenKind.NotEqual:
+                case TokenKind.AndAnd:
+                case TokenKind.OrOr:
+                case TokenKind.Percentage:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         /// -------------------------------------------------------------------------------------------------

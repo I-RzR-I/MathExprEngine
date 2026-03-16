@@ -34,7 +34,7 @@ namespace MathExprEngine.Nodes
     internal class BinaryNode : NodeBase
     {
         private readonly NodeBase _left, _right;
-        private readonly string _oper; // + - * / ^ < > <= >= == != && ||
+        private readonly string _oper; // + - * / % ^ < > <= >= == != && ||
 
         /// -------------------------------------------------------------------------------------------------
         /// <summary>
@@ -100,6 +100,11 @@ namespace MathExprEngine.Nodes
                         throw new MathRuleEngineException("Division by zero", Column);
 
                     return l / r;
+                case "%":
+                    if (r == 0.0)
+                        throw new MathRuleEngineException("Division by zero", Column);
+
+                    return l % r;
                 case "^": return Math.Pow(l, r);
 
                 // Comparisons: return 1.0 for true, 0.0 for false
