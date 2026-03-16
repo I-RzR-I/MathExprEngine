@@ -39,7 +39,7 @@ namespace MathExprEngine.Nodes
 
         /// -------------------------------------------------------------------------------------------------
         /// <summary>
-        ///     (Immutable) operation "+" or "-".
+        ///     (Immutable) operation "+", "-" or "%".
         /// </summary>
         /// =================================================================================================
         private readonly string _operation;
@@ -48,7 +48,7 @@ namespace MathExprEngine.Nodes
         /// <summary>
         ///     Initializes a new instance of the <see cref="UnaryNode"/> class.
         /// </summary>
-        /// <param name="operation">(Immutable) operation "+" or "-".</param>
+        /// <param name="operation">(Immutable) operation "+", "-" or "%".</param>
         /// <param name="operand">(Immutable) the operand.</param>
         /// <param name="col">The col.</param>
         /// =================================================================================================
@@ -69,6 +69,7 @@ namespace MathExprEngine.Nodes
             {
                 "+" => v,
                 "-" => -v,
+                "%" => v / 100.0,
                 _ => throw new MathRuleEngineException($"Unknown unary operator '{_operation}'", Column)
             };
         }

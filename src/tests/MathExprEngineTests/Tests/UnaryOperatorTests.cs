@@ -30,6 +30,12 @@ namespace MathExprEngineTests.Tests
         [DataRow("--5", 5)]
         [DataRow("-(2 + 3)", -5)]
         [DataRow("+5", 5)]
+        [DataRow("50%", 0.5)]
+        [DataRow("(20 + 30)%", 0.5)]
+        [DataRow("200 * 10%", 20)]
+        [DataRow("-50%", -0.5)]
+        [DataRow("25%%", 0.0025)]
+        [DataRow("100 + 10 + 3%", 110.03)]
         public void UnaryOperators_WorkCorrectly_Test(string expression, double expected)
         {
             var expEval = new MathRuleEngine();

@@ -297,6 +297,15 @@ namespace MathExprEngine.Helpers
                         });
                         i++;
                         break;
+                    case '%':
+                        tokens.Add(new ExpressionToken
+                        {
+                            Kind = TokenKind.Percentage, 
+                            Text = "%", 
+                            Column = col
+                        });
+                        i++;
+                        break;
                     default:
                         throw new MathRuleEngineException(DefaultMessages.TokenUnexpectedCharacter.FormatWith(c), col);
                 }

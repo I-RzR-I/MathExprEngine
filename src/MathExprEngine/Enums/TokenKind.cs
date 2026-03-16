@@ -131,6 +131,11 @@ namespace MathExprEngine.Enums
         /// <summary>
         ///     An enum constant representing the Parameter variable option.
         /// </summary>
-        ParamVariable
+        ParamVariable,
+
+        /// <summary>
+        ///     An enum constant representing the percentage [%] option.
+        /// </summary>
+        Percentage
     }
 }

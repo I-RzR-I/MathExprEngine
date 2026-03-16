@@ -423,7 +423,31 @@ namespace MathExprEngine.Helpers
                 return new UnaryNode("-", operand, opToken.Column);
             }
 
-            return ParsePrimary();
+            return ParsePostfix();
+        }
+
+        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
+        ///     Parse postfix.
+        /// </summary>
+        /// <remarks>
+        ///     postfix := primary ('%')*
+        /// </remarks>
+        /// <returns>
+        ///     A Node.
+        /// </returns>
+        /// =================================================================================================
+        private NodeBase ParsePostfix()
+        {
+            var node = ParsePrimary();
+
+            while (Match(TokenKind.Percentage).IsTrue())
+            {
+                var opToken = _tokens[Pos - 1];
+                node = new UnaryNode("%", node, opToken.Column);
+            }
+
+            return node;
         }
 
         /// -------------------------------------------------------------------------------------------------
