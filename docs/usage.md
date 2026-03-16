@@ -1,10 +1,14 @@
-# USING GUIDE
+# Usage Guide
 
 ## Installation
 
-The math expression is a single self-contained class. Add it directly to your project or package it as a library.
+The engine is self-contained and has no external runtime dependencies.
 
-No external dependencies.
+Install from NuGet:
+
+```powershell
+Install-Package MathExprEngine
+```
 
 ---
 
@@ -15,6 +19,24 @@ var calc = new MathRuleEngine();
 
 double result = calc.Evaluate("2 + 3 * (5 - 2)");
 // result = 11
+```
+
+---
+
+## Parameters (Variables)
+
+```csharp
+var calc = new MathRuleEngine();
+
+double result = calc.Evaluate(
+    "basePrice * quantity",
+    new Dictionary<string, object>
+    {
+        ["basePrice"] = 19.99,
+        ["quantity"] = 3
+    });
+
+// result = 59.97
 ```
 
 ---
@@ -37,6 +59,10 @@ calc.Evaluate("2 ^ 3 ^ 2");     // 512 (right-associative)
 calc.Evaluate("sqrt(16)");          // 4
 calc.Evaluate("pow(2, 5)");         // 32
 calc.Evaluate("sin(3.1415926535/2)");
+calc.Evaluate("sum(1, 2, 3, 4)");   // 10
+calc.Evaluate("max(3, 11, 5)");     // 11
+calc.Evaluate("mod(10, 4)");        // 2
+calc.Evaluate("neg(7)");            // -7
 ```
 
 ### Custom Functions
@@ -52,6 +78,8 @@ calc.RegisterFunction("max", args =>
 
 calc.Evaluate("max(10, 7)"); // 10
 ```
+
+Built-in names can be overridden by registering a function with the same name.
 
 ---
 
@@ -114,6 +142,8 @@ Example output:
 ```text
 Error: Unexpected token '*' at column 5
 ```
+
+You can catch `ExpressionFunctionException` for function-related runtime errors.
 
 ---
 
