@@ -1,20 +1,21 @@
 ﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.MathExprEngine
-//  Author           : RzR
-//  Created On       : 2026-01-18 17:01
+//  Assembly          : RzR.Shared.Entity.MathExprEngine
+//  Author            : RzR
+//  Created On        : 2026-09-03 22:09
 // 
 //  Last Modified By : RzR
-//  Last Modified On : 2026-01-18 18:53
-// ***********************************************************************
+//  Last Modified On : 2026-11-02 22:42
+//  ***********************************************************************
 //  <copyright file="GeneralAssemblyInfo.cs" company="RzR SOFT & TECH">
-//   Copyright © RzR. All rights reserved.
+//      Copyright (c) RzR. All rights reserved.
 //  </copyright>
-// 
-//  <summary>
-//  </summary>
-// ***********************************************************************
+//  <contact>
+//      https://iamrzr.dev/contact
+//  </contact>
+//  <summary></summary>
+//  ***********************************************************************
 
-#region U S A G E S
+#region U S I N G
 
 using System.Reflection;
 using System.Resources;
@@ -31,7 +32,9 @@ using System.Resources;
 [assembly: AssemblyProduct("MathExprEngine")]
 [assembly: AssemblyCopyright("Copyright © 2022-2026 RzR All rights reserved.")]
 [assembly: AssemblyTrademark("® RzR™")]
-[assembly: AssemblyDescription("Configurable .NET expression engine for rules and formulas, featuring AST parsing, short-circuit logic, and ternary conditionals.")]
+[assembly:
+    AssemblyDescription(
+        "Configurable .NET expression engine for rules and formulas, featuring AST parsing, short-circuit logic, and ternary conditionals.")]
 
 #if NET45_OR_GREATER || NET || NETSTANDARD
 [assembly: AssemblyMetadata("TermsOfService", "")]
@@ -44,6 +47,6 @@ using System.Resources;
 [assembly: NeutralResourcesLanguage("en-US", UltimateResourceFallbackLocation.MainAssembly)]
 #endif
 
-[assembly: AssemblyVersion("1.3.0.8086")]
-[assembly: AssemblyFileVersion("1.3.0.8086")]
-[assembly: AssemblyInformationalVersion("1.3.0.8086")]
+[assembly: AssemblyVersion("2.0.0.0")]
+[assembly: AssemblyFileVersion("2.0.0.0")]
+[assembly: AssemblyInformationalVersion("2.0.0.0")]
