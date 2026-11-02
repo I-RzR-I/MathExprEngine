@@ -272,6 +272,7 @@ coverage.*
 # NCrunch
 *.ncrunchproject.user
 .NCrunch_*/
+*.ncrunchproject
 
 # ReSharper
 _ReSharper.Caches-

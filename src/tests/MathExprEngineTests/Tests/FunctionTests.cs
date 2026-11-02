@@ -1,25 +1,5 @@
-﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.MathExprEngineTests
-//  Author           : RzR
-//  Created On       : 2026-02-02 21:02
-// 
-//  Last Modified By : RzR
-//  Last Modified On : 2026-02-02 21:21
-// ***********************************************************************
-//  <copyright file="FunctionTests.cs" company="RzR SOFT & TECH">
-//   Copyright © RzR. All rights reserved.
-//  </copyright>
-// 
-//  <summary>
-//  </summary>
-// ***********************************************************************
-
-#region U S A G E S
-
-using MathExprEngine;
+﻿using MathExprEngine;
 using MathExprEngine.Exceptions;
-
-#endregion
 
 namespace MathExprEngineTests.Tests
 {
@@ -81,6 +61,20 @@ namespace MathExprEngineTests.Tests
             Assert.ThrowsException<ExpressionFunctionException>(() =>
                 _engine.Evaluate(expression)
             );
+        }
+
+        [TestMethod]
+        public void Mod_ByZero_AgreesWithPercentOperator_Test()
+        {
+            var modEx = Assert.ThrowsException<MathRuleEngineException>(() =>
+                _engine.Evaluate("mod(10, 0)")
+            );
+            var percentEx = Assert.ThrowsException<MathRuleEngineException>(() =>
+                _engine.Evaluate("10 % 0")
+            );
+
+            StringAssert.Contains(modEx.Message, "Modulo by zero");
+            StringAssert.Contains(percentEx.Message, "Modulo by zero");
         }
     }
 }

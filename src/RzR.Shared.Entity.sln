@@ -14,6 +14,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathExprEngine", "MathExprE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathExprEngineTests", "tests\MathExprEngineTests\MathExprEngineTests.csproj", "{2D4E0D2F-CCA7-43BE-BB33-410424850254}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "benchmarks", "benchmarks", "{66320409-64EC-F7C5-3DEF-65E7510DAAD1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MathExprEngineBenchmarks", "benchmarks\MathExprEngineBenchmarks\MathExprEngineBenchmarks.csproj", "{AF254322-385C-46FD-9822-249B95C8CA22}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,12 +32,17 @@ Global
 		{2D4E0D2F-CCA7-43BE-BB33-410424850254}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D4E0D2F-CCA7-43BE-BB33-410424850254}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D4E0D2F-CCA7-43BE-BB33-410424850254}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF254322-385C-46FD-9822-249B95C8CA22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF254322-385C-46FD-9822-249B95C8CA22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF254322-385C-46FD-9822-249B95C8CA22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF254322-385C-46FD-9822-249B95C8CA22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2D4E0D2F-CCA7-43BE-BB33-410424850254} = {E737BE4D-6DFF-4A67-A3D9-2AC58BFBBC07}
+		{AF254322-385C-46FD-9822-249B95C8CA22} = {66320409-64EC-F7C5-3DEF-65E7510DAAD1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		BuildVersion_UseUniversalClock = True

@@ -1,26 +1,6 @@
-﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.MathExprEngineTests
-//  Author           : RzR
-//  Created On       : 2026-01-18 19:01
-// 
-//  Last Modified By : RzR
-//  Last Modified On : 2026-01-18 19:29
-// ***********************************************************************
-//  <copyright file="ExpressionParseTests.cs" company="RzR SOFT & TECH">
-//   Copyright © RzR. All rights reserved.
-//  </copyright>
-// 
-//  <summary>
-//  </summary>
-// ***********************************************************************
-
-#region U S A G E S
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MathExprEngine;
 using MathExprEngineTests.Helpers;
-
-#endregion
 
 namespace MathExprEngineTests.Tests
 {
