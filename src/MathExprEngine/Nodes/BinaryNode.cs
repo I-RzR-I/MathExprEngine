@@ -19,7 +19,7 @@
 
 using System;
 using System.Linq.Expressions;
-using DomainCommonExtensions.DataTypeExtensions;
+using RzR.Extensions.Domain.Text;
 using MathExprEngine.Compilation;
 using MathExprEngine.Helpers;
 using MathExprEngine.Models;

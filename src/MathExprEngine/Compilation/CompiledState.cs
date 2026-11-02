@@ -17,7 +17,7 @@
 
 #region U S I N G
 
-using DomainCommonExtensions.Utilities.Ensure;
+using RzR.Extensions.Domain.Validation;
 
 #endregion
 

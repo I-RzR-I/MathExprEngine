@@ -20,7 +20,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using DomainCommonExtensions.DataTypeExtensions;
+using RzR.Extensions.Domain.Text;
 using MathExprEngine.Exceptions;
 
 #endregion

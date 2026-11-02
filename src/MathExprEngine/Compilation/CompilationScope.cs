@@ -21,8 +21,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
-using DomainCommonExtensions.DataTypeExtensions;
-using DomainCommonExtensions.Utilities.Ensure;
+using RzR.Extensions.Domain.Text;
+using RzR.Extensions.Domain.Validation;
 using MathExprEngine.Exceptions;
 using MathExprEngine.Helpers;
 

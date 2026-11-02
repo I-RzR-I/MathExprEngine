@@ -18,7 +18,7 @@
 #region U S I N G
 
 using System.Linq.Expressions;
-using DomainCommonExtensions.DataTypeExtensions;
+using RzR.Extensions.Domain.Primitives;
 using MathExprEngine.Compilation;
 using MathExprEngine.Helpers;
 using MathExprEngine.Models;

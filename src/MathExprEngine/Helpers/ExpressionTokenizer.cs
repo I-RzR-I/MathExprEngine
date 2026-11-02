@@ -19,8 +19,9 @@
 
 using System.Collections.Generic;
 using System.Globalization;
-using DomainCommonExtensions.Collections;
-using DomainCommonExtensions.DataTypeExtensions;
+using RzR.Extensions.Domain.Collections.Types;
+using RzR.Extensions.Domain.Primitives;
+using RzR.Extensions.Domain.Text;
 using MathExprEngine.Enums;
 using MathExprEngine.Exceptions;
 using MathExprEngine.Models;

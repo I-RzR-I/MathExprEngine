@@ -19,7 +19,7 @@
 
 using System;
 using System.Runtime.Serialization;
-using DomainCommonExtensions.DataTypeExtensions;
+using RzR.Extensions.Domain.Text;
 using MathExprEngine.Helpers;
 
 #endregion

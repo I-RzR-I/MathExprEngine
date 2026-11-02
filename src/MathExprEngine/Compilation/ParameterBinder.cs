@@ -19,8 +19,8 @@
 
 using System;
 using System.Collections.Generic;
-using DomainCommonExtensions.ArraysExtensions;
-using DomainCommonExtensions.Utilities.Ensure;
+using RzR.Extensions.Domain.Collections;
+using RzR.Extensions.Domain.Validation;
 using MathExprEngine.Exceptions;
 using MathExprEngine.Helpers;
 
@@ -82,7 +82,7 @@ namespace MathExprEngine.Compilation
 
             try
             {
-                if (parameters.IsNotNullOrEmptyEnumerable())
+                if (parameters.IsNullOrEmptyEnumerable())
                     return slots;
 
                 if (_slotCount > 0 && IsCaseInsensitiveDictionary(parameters))

@@ -53,7 +53,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DomainCommonExtensions" Version="4.5.0.7408" />
+		<PackageReference Include="RzR.Extensions.Domain" Version="7.1.0.5494" />
 	</ItemGroup>
 
 	<ItemGroup>

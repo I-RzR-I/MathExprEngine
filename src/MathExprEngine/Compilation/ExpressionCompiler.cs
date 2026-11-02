@@ -18,7 +18,7 @@
 #region U S I N G
 
 using System.Linq.Expressions;
-using DomainCommonExtensions.Utilities.Ensure;
+using RzR.Extensions.Domain.Validation;
 using MathExprEngine.Exceptions;
 using MathExprEngine.Nodes;
 

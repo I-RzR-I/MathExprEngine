@@ -18,7 +18,7 @@
 #region U S I N G
 
 using System.Collections.Generic;
-using DomainCommonExtensions.Utilities.Ensure;
+using RzR.Extensions.Domain.Validation;
 using MathExprEngine.Compilation;
 using MathExprEngine.Exceptions;
 

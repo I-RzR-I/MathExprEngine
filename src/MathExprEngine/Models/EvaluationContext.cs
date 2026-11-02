@@ -20,8 +20,8 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using DomainCommonExtensions.ArraysExtensions;
-using DomainCommonExtensions.DataTypeExtensions;
+using RzR.Extensions.Domain.Collections;
+using RzR.Extensions.Domain.Text;
 using MathExprEngine.Exceptions;
 using MathExprEngine.Helpers;
 

@@ -21,7 +21,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
-using DomainCommonExtensions.CommonExtensions;
+using RzR.Extensions.Domain.Primitives;
 using MathExprEngine.Compilation;
 
 #endregion
