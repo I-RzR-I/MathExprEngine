@@ -1,4 +1,4 @@
-### **v2.0.0.0** [[RzR](mailto:108324929+I-RzR-I@users.noreply.github.com)] 03-09-2026
+### **v2.0.0.0** [[RzR](mailto:108324929+I-RzR-I@users.noreply.github.com)] 03-11-2026
 * (RzR) -> [#8] - Remove `MathRuleEngine.Instance`; create an engine with `new MathRuleEngine()`.
 * (RzR) -> [#8] - Change `^` to bind tighter than unary minus: `-2^2` = -4.
 * (RzR) -> [#8] - Change `%` followed by + or - to modulo: `100% + 2` = 0.
