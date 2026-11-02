@@ -1,52 +1,48 @@
-﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.MathExprEngine
-//  Author           : RzR
-//  Created On       : 2026-02-17 14:02
+// ***********************************************************************
+//  Assembly          : RzR.Shared.Entity.MathExprEngine
+//  Author            : RzR
+//  Created On        : 2026-10-22 20:10
 // 
 //  Last Modified By : RzR
-//  Last Modified On : 2026-02-17 15:27
-// ***********************************************************************
+//  Last Modified On : 2026-10-31 15:37
+//  ***********************************************************************
 //  <copyright file="ParameterNode.cs" company="RzR SOFT & TECH">
-//   Copyright © RzR. All rights reserved.
+//      Copyright (c) RzR. All rights reserved.
 //  </copyright>
-// 
-//  <summary>
-//  </summary>
-// ***********************************************************************
+//  <contact>
+//      https://iamrzr.dev/contact
+//  </contact>
+//  <summary></summary>
+//  ***********************************************************************
 
-#region U S A G E S
+#region U S I N G
 
-using System;
-using System.Globalization;
-using DomainCommonExtensions.DataTypeExtensions;
-using MathExprEngine.Exceptions;
+using System.Linq.Expressions;
+using RzR.Extensions.Domain.Primitives;
+using MathExprEngine.Compilation;
+using MathExprEngine.Helpers;
+using MathExprEngine.Models;
 
 #endregion
 
 namespace MathExprEngine.Nodes
 {
-    /// -------------------------------------------------------------------------------------------------
     /// <summary>
     ///     A parameter (variable) node.
     /// </summary>
-    /// <seealso cref="T:MathExprEngine.Nodes.NodeBase"/>
-    /// =================================================================================================
-    internal class ParameterNode : NodeBase
+    /// <seealso cref="T:MathExprEngine.Nodes.NodeBase" />
+    internal sealed class ParameterNode : NodeBase
     {
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     (Immutable) the name.
         /// </summary>
-        /// =================================================================================================
         private readonly string _name;
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
-        ///     Initializes a new instance of the <see cref="ParameterNode"/> class.
+        ///     Initializes a new instance of the <see cref="ParameterNode" /> class.
         /// </summary>
         /// <param name="name">(Immutable) the name.</param>
         /// <param name="column">The column.</param>
-        /// =================================================================================================
         public ParameterNode(string name, int column)
         {
             _name = name;
@@ -54,12 +50,21 @@ namespace MathExprEngine.Nodes
         }
 
         /// <inheritdoc />
-        public override double Evaluate(MathRuleEngine ctx)
+        protected override double EvaluateCore(EvaluationContext ctx)
         {
             if (ctx.Parameters.TryGetValue(_name, out var raw).IsFalse())
-                throw new ExpressionSyntaxException($"Undefined variable '{_name}'.", Column);
+                throw NodeSemantics.UndefinedVariable(_name, Column);
 
-            return Convert.ToDouble(raw, CultureInfo.InvariantCulture);
+            return NodeSemantics.CoerceParameter(_name, raw, Column);
+        }
+
+        /// <inheritdoc />
+        protected override Expression CompileCore(CompilationScope scope)
+        {
+            var slot = Expression.ArrayIndex(scope.Slots, Expression.Constant(scope.GetSlot(_name)));
+
+            return Expression.Call(
+                CompiledRuntime.ReadParameterMethod, slot, Expression.Constant(_name), Expression.Constant(Column));
         }
     }
 }

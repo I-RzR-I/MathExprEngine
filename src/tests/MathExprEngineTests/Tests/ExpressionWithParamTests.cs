@@ -1,20 +1,4 @@
-﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.MathExprEngineTests
-//  Author           : RzR
-//  Created On       : 2026-02-17 14:02
-// 
-//  Last Modified By : RzR
-//  Last Modified On : 2026-02-17 14:38
-// ***********************************************************************
-//  <copyright file="ExpressionWithParamTests.cs" company="RzR SOFT & TECH">
-//   Copyright © RzR. All rights reserved.
-//  </copyright>
-// 
-//  <summary>
-//  </summary>
-// ***********************************************************************
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using MathExprEngine;
 
 namespace MathExprEngineTests.Tests
@@ -80,4 +64,3 @@ namespace MathExprEngineTests.Tests
         }
     }
 }
-

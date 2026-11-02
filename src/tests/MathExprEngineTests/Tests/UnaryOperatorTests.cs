@@ -1,24 +1,5 @@
-﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.MathExprEngineTests
-//  Author           : RzR
-//  Created On       : 2026-02-02 21:02
-// 
-//  Last Modified By : RzR
-//  Last Modified On : 2026-02-02 21:21
-// ***********************************************************************
-//  <copyright file="UnaryOperatorTests.cs" company="RzR SOFT & TECH">
-//   Copyright © RzR. All rights reserved.
-//  </copyright>
-// 
-//  <summary>
-//  </summary>
-// ***********************************************************************
-
-#region U S A G E S
-
-using MathExprEngine;
-
-#endregion
+﻿using MathExprEngine;
+using MathExprEngine.Exceptions;
 
 namespace MathExprEngineTests.Tests
 {
@@ -36,11 +17,28 @@ namespace MathExprEngineTests.Tests
         [DataRow("-50%", -0.5)]
         [DataRow("25%%", 0.0025)]
         [DataRow("100 + 10 + 3%", 110.03)]
+        [DataRow("-2^2", -4)]
+        [DataRow("-4^0.5", -2)]
+        [DataRow("2^3^2", 512)]
+        [DataRow("2^-3", 0.125)]
+        [DataRow("-2^-2", -0.25)]
+        [DataRow("2*-3", -6)]
+        [DataRow("-2*3", -6)]
         public void UnaryOperators_WorkCorrectly_Test(string expression, double expected)
         {
             var expEval = new MathRuleEngine();
 
             Assert.AreEqual(expected, expEval.Evaluate(expression));
+        }
+
+        [TestMethod]
+        public void ZeroToNegativePower_ThrowsInsteadOfReturningInfinity_Test()
+        {
+            var expEval = new MathRuleEngine();
+
+            Assert.ThrowsException<MathRuleEngineException>(() =>
+                expEval.Evaluate("0^-1")
+            );
         }
     }
 }

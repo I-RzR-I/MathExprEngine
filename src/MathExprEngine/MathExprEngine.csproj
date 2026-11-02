@@ -9,7 +9,8 @@
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageIcon>PackageIcon.png</PackageIcon>
 		<NoWarn>$(NoWarn);CS8032</NoWarn>
-		<EnableNETAnalyzers>false</EnableNETAnalyzers>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<AnalysisLevel>latest-minimum</AnalysisLevel>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<PackageTags>
 			Expression;Calculator;Evaluator;ast;parser;math;evaluation;functions;Rule-Engine;expression-evaluator
@@ -52,7 +53,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DomainCommonExtensions" Version="4.5.0.7408" />
+		<PackageReference Include="RzR.Extensions.Domain" Version="7.1.0.5494" />
 	</ItemGroup>
 
 	<ItemGroup>

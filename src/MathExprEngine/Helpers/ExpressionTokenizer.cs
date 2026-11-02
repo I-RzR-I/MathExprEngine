@@ -1,25 +1,27 @@
 ﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.MathExprEngine
-//  Author           : RzR
-//  Created On       : 2026-01-18 20:01
+//  Assembly          : RzR.Shared.Entity.MathExprEngine
+//  Author            : RzR
+//  Created On        : 2026-09-03 22:09
 // 
 //  Last Modified By : RzR
-//  Last Modified On : 2026-01-18 20:10
-// ***********************************************************************
+//  Last Modified On : 2026-10-31 15:37
+//  ***********************************************************************
 //  <copyright file="ExpressionTokenizer.cs" company="RzR SOFT & TECH">
-//   Copyright © RzR. All rights reserved.
+//      Copyright (c) RzR. All rights reserved.
 //  </copyright>
-// 
-//  <summary>
-//  </summary>
-// ***********************************************************************
+//  <contact>
+//      https://iamrzr.dev/contact
+//  </contact>
+//  <summary></summary>
+//  ***********************************************************************
 
-#region U S A G E S
+#region U S I N G
 
 using System.Collections.Generic;
 using System.Globalization;
-using DomainCommonExtensions.Collections;
-using DomainCommonExtensions.DataTypeExtensions;
+using RzR.Extensions.Domain.Collections.Types;
+using RzR.Extensions.Domain.Primitives;
+using RzR.Extensions.Domain.Text;
 using MathExprEngine.Enums;
 using MathExprEngine.Exceptions;
 using MathExprEngine.Models;
@@ -28,30 +30,41 @@ using MathExprEngine.Models;
 
 namespace MathExprEngine.Helpers
 {
-    /// -------------------------------------------------------------------------------------------------
     /// <summary>
     ///     An expression tokenizer.
     /// </summary>
-    /// =================================================================================================
     internal static class ExpressionTokenizer
     {
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
-        ///     Tokenize the input string(expression), producing tokens with column info.
+        ///     Splits the expression into tokens with their source columns.
         /// </summary>
         /// <exception cref="MathRuleEngineException">
-        ///     Thrown when the Mathematics Rule Engine error condition occurs.
+        ///     Thrown when a number or character is invalid, or tokens exceed <see cref="MathRuleEngineOptions.MaxTokens" />.
         /// </exception>
         /// <param name="sourceExpression">Source expression.</param>
+        /// <param name="options">
+        ///     The token limit, or null for defaults.
+        /// </param>
         /// <returns>
-        ///     An IIndexableEnumerable&lt;ExpressionToken&gt;
+        ///     The tokens, ending with an end-of-text token.
         /// </returns>
-        /// =================================================================================================
-        internal static IIndexableEnumerable<ExpressionToken> Tokenize(string sourceExpression)
+        internal static IIndexableEnumerable<ExpressionToken> Tokenize(string sourceExpression,
+            MathRuleEngineOptions options)
         {
+            options = options ?? new MathRuleEngineOptions();
+
             var tokens = new List<ExpressionToken>();
             var i = 0;
             var n = sourceExpression.Length;
+
+            static void AddToken(List<ExpressionToken> tokens, MathRuleEngineOptions options, ExpressionToken token)
+            {
+                tokens.Add(token);
+
+                if (token.Kind != TokenKind.EndOfText && tokens.Count > options.MaxTokens)
+                    throw new MathRuleEngineException(
+                        DefaultMessages.TooManyTokens.FormatWith(tokens.Count, options.MaxTokens), token.Column);
+            }
 
             while (true)
             {
@@ -60,7 +73,8 @@ namespace MathExprEngine.Helpers
 
                 if (i >= n)
                 {
-                    tokens.Add(new ExpressionToken { Kind = TokenKind.EndOfText, Text = "", Column = i });
+                    AddToken(tokens, options,
+                        new ExpressionToken { Kind = TokenKind.EndOfText, Text = "", Column = i });
                     break;
                 }
 
@@ -85,14 +99,16 @@ namespace MathExprEngine.Helpers
                     }
 
                     var txt = sourceExpression.Substring(start, i - start);
-                    if (double.TryParse(txt, NumberStyles.Float, CultureInfo.InvariantCulture, out var val).IsFalse())
+
+                    if (double.TryParse(txt, NumberStyles.Float, CultureInfo.InvariantCulture, out var val).IsFalse()
+                        || double.IsInfinity(val) || double.IsNaN(val))
                         throw new MathRuleEngineException(DefaultMessages.TokenInvalidNumber.FormatWith(txt), start);
 
-                    tokens.Add(new ExpressionToken
+                    AddToken(tokens, options, new ExpressionToken
                     {
                         Kind = TokenKind.Number,
                         Text = txt,
-                        Number = val, 
+                        Number = val,
                         Column = col
                     });
                     continue;
@@ -110,11 +126,11 @@ namespace MathExprEngine.Helpers
                     while (nextNonSpace < n && char.IsWhiteSpace(sourceExpression[nextNonSpace]))
                         nextNonSpace++;
 
-                    var kind = (nextNonSpace < n && sourceExpression[nextNonSpace] == '(')
-                        ? TokenKind.Identifier   // function call follows
-                        : TokenKind.ParamVariable;    // bare name → variable
+                    var kind = nextNonSpace < n && sourceExpression[nextNonSpace] == '('
+                        ? TokenKind.Identifier // function call follows
+                        : TokenKind.ParamVariable; // bare name → variable
 
-                    tokens.Add(new ExpressionToken
+                    AddToken(tokens, options, new ExpressionToken
                     {
                         Kind = kind,
                         Text = name,
@@ -130,55 +146,55 @@ namespace MathExprEngine.Helpers
                     switch (two)
                     {
                         case "<=":
-                            tokens.Add(new ExpressionToken
+                            AddToken(tokens, options, new ExpressionToken
                             {
-                                Kind = TokenKind.LessEqual, 
-                                Text = two, 
+                                Kind = TokenKind.LessEqual,
+                                Text = two,
                                 Column = col
                             });
                             i += 2;
                             continue;
                         case ">=":
-                            tokens.Add(new ExpressionToken
+                            AddToken(tokens, options, new ExpressionToken
                             {
-                                Kind = TokenKind.GreaterEqual, 
-                                Text = two, 
+                                Kind = TokenKind.GreaterEqual,
+                                Text = two,
                                 Column = col
                             });
                             i += 2;
                             continue;
                         case "==":
-                            tokens.Add(new ExpressionToken
+                            AddToken(tokens, options, new ExpressionToken
                             {
-                                Kind = TokenKind.EqualEqual, 
-                                Text = two, 
+                                Kind = TokenKind.EqualEqual,
+                                Text = two,
                                 Column = col
                             });
                             i += 2;
                             continue;
                         case "!=":
-                            tokens.Add(new ExpressionToken
+                            AddToken(tokens, options, new ExpressionToken
                             {
-                                Kind = TokenKind.NotEqual, 
+                                Kind = TokenKind.NotEqual,
                                 Text = two,
                                 Column = col
                             });
                             i += 2;
                             continue;
                         case "&&":
-                            tokens.Add(new ExpressionToken
+                            AddToken(tokens, options, new ExpressionToken
                             {
                                 Kind = TokenKind.AndAnd,
-                                Text = two, 
+                                Text = two,
                                 Column = col
                             });
                             i += 2;
                             continue;
                         case "||":
-                            tokens.Add(new ExpressionToken
+                            AddToken(tokens, options, new ExpressionToken
                             {
                                 Kind = TokenKind.OrOr,
-                                Text = two, 
+                                Text = two,
                                 Column = col
                             });
                             i += 2;
@@ -190,34 +206,34 @@ namespace MathExprEngine.Helpers
                 switch (c)
                 {
                     case '+':
-                        tokens.Add(new ExpressionToken
+                        AddToken(tokens, options, new ExpressionToken
                         {
-                            Kind = TokenKind.Plus, 
+                            Kind = TokenKind.Plus,
                             Text = "+",
                             Column = col
                         });
                         i++;
                         break;
                     case '-':
-                        tokens.Add(new ExpressionToken
+                        AddToken(tokens, options, new ExpressionToken
                         {
                             Kind = TokenKind.Minus,
-                            Text = "-", 
+                            Text = "-",
                             Column = col
                         });
                         i++;
                         break;
                     case '*':
-                        tokens.Add(new ExpressionToken
+                        AddToken(tokens, options, new ExpressionToken
                         {
                             Kind = TokenKind.Star,
-                            Text = "*", 
+                            Text = "*",
                             Column = col
                         });
                         i++;
                         break;
                     case '/':
-                        tokens.Add(new ExpressionToken
+                        AddToken(tokens, options, new ExpressionToken
                         {
                             Kind = TokenKind.Slash,
                             Text = "/",
@@ -226,34 +242,34 @@ namespace MathExprEngine.Helpers
                         i++;
                         break;
                     case '^':
-                        tokens.Add(new ExpressionToken
+                        AddToken(tokens, options, new ExpressionToken
                         {
                             Kind = TokenKind.Caret,
-                            Text = "^", 
+                            Text = "^",
                             Column = col
                         });
                         i++;
                         break;
                     case '(':
-                        tokens.Add(new ExpressionToken
+                        AddToken(tokens, options, new ExpressionToken
                         {
                             Kind = TokenKind.LParen,
-                            Text = "(", 
+                            Text = "(",
                             Column = col
                         });
                         i++;
                         break;
                     case ')':
-                        tokens.Add(new ExpressionToken
+                        AddToken(tokens, options, new ExpressionToken
                         {
                             Kind = TokenKind.RParen,
-                            Text = ")", 
+                            Text = ")",
                             Column = col
                         });
                         i++;
                         break;
                     case ',':
-                        tokens.Add(new ExpressionToken
+                        AddToken(tokens, options, new ExpressionToken
                         {
                             Kind = TokenKind.Comma,
                             Text = ",",
@@ -262,16 +278,16 @@ namespace MathExprEngine.Helpers
                         i++;
                         break;
                     case '?':
-                        tokens.Add(new ExpressionToken
+                        AddToken(tokens, options, new ExpressionToken
                         {
                             Kind = TokenKind.Question,
-                            Text = "?", 
+                            Text = "?",
                             Column = col
                         });
                         i++;
                         break;
                     case ':':
-                        tokens.Add(new ExpressionToken
+                        AddToken(tokens, options, new ExpressionToken
                         {
                             Kind = TokenKind.Colon,
                             Text = ":",
@@ -280,7 +296,7 @@ namespace MathExprEngine.Helpers
                         i++;
                         break;
                     case '<':
-                        tokens.Add(new ExpressionToken
+                        AddToken(tokens, options, new ExpressionToken
                         {
                             Kind = TokenKind.Less,
                             Text = "<",
@@ -289,19 +305,19 @@ namespace MathExprEngine.Helpers
                         i++;
                         break;
                     case '>':
-                        tokens.Add(new ExpressionToken
+                        AddToken(tokens, options, new ExpressionToken
                         {
-                            Kind = TokenKind.Greater, 
-                            Text = ">", 
+                            Kind = TokenKind.Greater,
+                            Text = ">",
                             Column = col
                         });
                         i++;
                         break;
                     case '%':
-                        tokens.Add(new ExpressionToken
+                        AddToken(tokens, options, new ExpressionToken
                         {
-                            Kind = TokenKind.Percentage, 
-                            Text = "%", 
+                            Kind = TokenKind.Percentage,
+                            Text = "%",
                             Column = col
                         });
                         i++;
@@ -315,4 +331,3 @@ namespace MathExprEngine.Helpers
         }
     }
 }
-
