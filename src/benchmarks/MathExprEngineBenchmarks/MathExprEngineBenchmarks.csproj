@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net8.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<IsPackable>false</IsPackable>
+		<IsTestProject>false</IsTestProject>
+		<Optimize>true</Optimize>
+		<DebugType>pdbonly</DebugType>
+		<DebugSymbols>true</DebugSymbols>
+		<ServerGarbageCollection>false</ServerGarbageCollection>
+		<ConcurrentGarbageCollection>false</ConcurrentGarbageCollection>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<DefaultEngineProjectPath>..\..\MathExprEngine\MathExprEngine.csproj</DefaultEngineProjectPath>
+		<EngineProjectPath Condition="'$(EngineProjectPath)' == ''">$(DefaultEngineProjectPath)</EngineProjectPath>
+		<EngineProjectFullPath>$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine($(MSBuildProjectDirectory), $(EngineProjectPath)))))</EngineProjectFullPath>
+		<DefaultEngineProjectFullPath>$([System.IO.Path]::GetFullPath($([System.IO.Path]::Combine($(MSBuildProjectDirectory), $(DefaultEngineProjectPath)))))</DefaultEngineProjectFullPath>
+		<DefineConstants Condition="'$(EngineProjectFullPath)' != '$(DefaultEngineProjectFullPath)'">$(DefineConstants);BASELINE_ENGINE</DefineConstants>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+			<_Parameter1>EngineProjectPath</_Parameter1>
+			<_Parameter2>$(EngineProjectFullPath)</_Parameter2>
+		</AssemblyAttribute>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="BenchmarkDotNet" Version="0.14.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="$(EngineProjectFullPath)" />
+	</ItemGroup>
+
+</Project>
