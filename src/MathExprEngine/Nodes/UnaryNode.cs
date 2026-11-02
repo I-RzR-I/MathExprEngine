@@ -1,57 +1,54 @@
-﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.MathExprEngine
-//  Author           : RzR
-//  Created On       : 2026-01-18 18:01
+// ***********************************************************************
+//  Assembly          : RzR.Shared.Entity.MathExprEngine
+//  Author            : RzR
+//  Created On        : 2026-10-22 20:10
 // 
 //  Last Modified By : RzR
-//  Last Modified On : 2026-01-18 18:53
-// ***********************************************************************
+//  Last Modified On : 2026-10-31 15:38
+//  ***********************************************************************
 //  <copyright file="UnaryNode.cs" company="RzR SOFT & TECH">
-//   Copyright © RzR. All rights reserved.
+//      Copyright (c) RzR. All rights reserved.
 //  </copyright>
-// 
-//  <summary>
-//  </summary>
-// ***********************************************************************
+//  <contact>
+//      https://iamrzr.dev/contact
+//  </contact>
+//  <summary></summary>
+//  ***********************************************************************
 
-#region U S A G E S
+#region U S I N G
 
-using MathExprEngine.Exceptions;
+using System.Linq.Expressions;
+using DomainCommonExtensions.DataTypeExtensions;
+using MathExprEngine.Compilation;
+using MathExprEngine.Helpers;
+using MathExprEngine.Models;
 
 #endregion
 
 namespace MathExprEngine.Nodes
 {
-    /// -------------------------------------------------------------------------------------------------
     /// <summary>
     ///     An unary node.
     /// </summary>
-    /// <seealso cref="T:MathExprEngine.Nodes.NodeBase"/>
-    /// =================================================================================================
-    internal class UnaryNode : NodeBase
+    /// <seealso cref="T:MathExprEngine.Nodes.NodeBase" />
+    internal sealed class UnaryNode : NodeBase
     {
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     (Immutable) the operand.
         /// </summary>
-        /// =================================================================================================
         private readonly NodeBase _operand;
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     (Immutable) operation "+", "-" or "%".
         /// </summary>
-        /// =================================================================================================
         private readonly string _operation;
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
-        ///     Initializes a new instance of the <see cref="UnaryNode"/> class.
+        ///     Initializes a new instance of the <see cref="UnaryNode" /> class.
         /// </summary>
         /// <param name="operation">(Immutable) operation "+", "-" or "%".</param>
         /// <param name="operand">(Immutable) the operand.</param>
         /// <param name="col">The col.</param>
-        /// =================================================================================================
         public UnaryNode(string operation, NodeBase operand, int col)
         {
             _operation = operation;
@@ -61,7 +58,10 @@ namespace MathExprEngine.Nodes
         }
 
         /// <inheritdoc />
-        public override double Evaluate(MathRuleEngine ctx)
+        protected override bool IsFiniteWhenOperandsFinite => _operation == "+" || _operation == "-";
+
+        /// <inheritdoc />
+        protected override double EvaluateCore(EvaluationContext ctx)
         {
             var v = _operand.Evaluate(ctx);
 
@@ -70,9 +70,27 @@ namespace MathExprEngine.Nodes
                 "+" => v,
                 "-" => -v,
                 "%" => v / 100.0,
-                _ => throw new MathRuleEngineException($"Unknown unary operator '{_operation}'", Column)
+                _ => throw NodeSemantics.UnknownOperator(DefaultMessages.UnknownUnaryOperator.FormatWith(_operation),
+                    Column)
             };
+        }
+
+        /// <inheritdoc />
+        protected override Expression CompileCore(CompilationScope scope)
+        {
+            var operand = _operand.Compile(scope);
+
+            switch (_operation)
+            {
+                case "+": return operand;
+                case "-": return Expression.Negate(operand);
+                case "%": return Expression.Divide(operand, Expression.Constant(100.0));
+                default:
+                    return Expression.Call(
+                        CompiledRuntime.ThrowUnknownOperatorMethod,
+                        Expression.Constant(DefaultMessages.UnknownUnaryOperator.FormatWith(_operation)),
+                        Expression.Constant(Column));
+            }
         }
     }
 }
-

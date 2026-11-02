@@ -9,7 +9,8 @@
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageIcon>PackageIcon.png</PackageIcon>
 		<NoWarn>$(NoWarn);CS8032</NoWarn>
-		<EnableNETAnalyzers>false</EnableNETAnalyzers>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<AnalysisLevel>latest-minimum</AnalysisLevel>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<PackageTags>
 			Expression;Calculator;Evaluator;ast;parser;math;evaluation;functions;Rule-Engine;expression-evaluator

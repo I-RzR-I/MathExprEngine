@@ -1,27 +1,26 @@
 ﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.MathExprEngine
-//  Author           : RzR
-//  Created On       : 2026-01-18 18:01
+//  Assembly          : RzR.Shared.Entity.MathExprEngine
+//  Author            : RzR
+//  Created On        : 2026-09-03 22:09
 // 
 //  Last Modified By : RzR
-//  Last Modified On : 2026-01-18 18:53
-// ***********************************************************************
+//  Last Modified On : 2026-10-31 15:38
+//  ***********************************************************************
 //  <copyright file="TokenKind.cs" company="RzR SOFT & TECH">
-//   Copyright © RzR. All rights reserved.
+//      Copyright (c) RzR. All rights reserved.
 //  </copyright>
-// 
-//  <summary>
-//  </summary>
-// ***********************************************************************
+//  <contact>
+//      https://iamrzr.dev/contact
+//  </contact>
+//  <summary></summary>
+//  ***********************************************************************
 
 namespace MathExprEngine.Enums
 {
-    /// -------------------------------------------------------------------------------------------------
     /// <summary>
     ///     Values that represent token kinds.
     /// </summary>
-    /// =================================================================================================
-    public enum TokenKind
+    internal enum TokenKind
     {
         /// <summary>
         ///     An enum constant representing the number option.
@@ -114,7 +113,7 @@ namespace MathExprEngine.Enums
         NotEqual,
 
         /// <summary>
-        ///     An enum constant representing the 'and' [&&] option.
+        ///     An enum constant representing the 'and' [&amp;&amp;] option.
         /// </summary>
         AndAnd,
 

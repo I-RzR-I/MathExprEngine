@@ -1,18 +1,28 @@
-﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.MathExprEngine
-//  Author           : RzR
-//  Created On       : 2026-01-18 18:01
+// ***********************************************************************
+//  Assembly          : RzR.Shared.Entity.MathExprEngine
+//  Author            : RzR
+//  Created On        : 2026-10-22 20:10
 // 
 //  Last Modified By : RzR
-//  Last Modified On : 2026-01-18 18:53
-// ***********************************************************************
+//  Last Modified On : 2026-10-31 15:37
+//  ***********************************************************************
 //  <copyright file="ConditionalNode.cs" company="RzR SOFT & TECH">
-//   Copyright © RzR. All rights reserved.
+//      Copyright (c) RzR. All rights reserved.
 //  </copyright>
-// 
-//  <summary>
-//  </summary>
-// ***********************************************************************
+//  <contact>
+//      https://iamrzr.dev/contact
+//  </contact>
+//  <summary></summary>
+//  ***********************************************************************
+
+#region U S I N G
+
+using System.Linq.Expressions;
+using MathExprEngine.Compilation;
+using MathExprEngine.Helpers;
+using MathExprEngine.Models;
+
+#endregion
 
 namespace MathExprEngine.Nodes
 {
@@ -20,16 +30,16 @@ namespace MathExprEngine.Nodes
     /// <summary>
     ///     A conditional node.
     /// </summary>
-    /// <seealso cref="T:MathExprEngine.Nodes.NodeBase"/>
+    /// <seealso cref="T:MathExprEngine.Nodes.NodeBase" />
     /// =================================================================================================
-    internal class ConditionalNode : NodeBase
+    internal sealed class ConditionalNode : NodeBase
     {
         // condition ? ifTrue : ifFalse
         private readonly NodeBase _condition, _ifTrue, _ifFalse;
 
         /// -------------------------------------------------------------------------------------------------
         /// <summary>
-        ///     Initializes a new instance of the <see cref="ConditionalNode"/> class.
+        ///     Initializes a new instance of the <see cref="ConditionalNode" /> class.
         /// </summary>
         /// <param name="cond">The condition.</param>
         /// <param name="t">A NodeBase to process.</param>
@@ -46,14 +56,31 @@ namespace MathExprEngine.Nodes
         }
 
         /// <inheritdoc />
-        public override double Evaluate(MathRuleEngine ctx)
+        protected override bool IsFiniteWhenOperandsFinite => true;
+
+        /// <inheritdoc />
+        protected override double EvaluateCore(EvaluationContext ctx)
         {
             var conditionEval = _condition.Evaluate(ctx);
-            var condTrue = conditionEval != 0.0;
+
+            var condTrue = NodeSemantics.IsTrue(conditionEval, Column);
 
             if (condTrue)
                 return _ifTrue.Evaluate(ctx); // short-circuit: only evaluate chosen branch
             return _ifFalse.Evaluate(ctx);
+        }
+
+        /// <inheritdoc />
+        protected override Expression CompileCore(CompilationScope scope)
+        {
+            var condition = _condition.Compile(scope);
+            var ifTrue = _ifTrue.Compile(scope);
+            var ifFalse = _ifFalse.Compile(scope);
+
+            return Expression.Condition(
+                Expression.Call(CompiledRuntime.IsTrueMethod, condition, Expression.Constant(Column)),
+                ifTrue,
+                ifFalse);
         }
     }
 }

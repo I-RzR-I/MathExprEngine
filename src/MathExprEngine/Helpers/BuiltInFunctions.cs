@@ -1,25 +1,25 @@
 ﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.MathExprEngine
-//  Author           : RzR
-//  Created On       : 2026-01-18 18:01
+//  Assembly          : RzR.Shared.Entity.MathExprEngine
+//  Author            : RzR
+//  Created On        : 2026-09-03 22:09
 // 
 //  Last Modified By : RzR
-//  Last Modified On : 2026-01-18 21:25
-// ***********************************************************************
+//  Last Modified On : 2026-10-31 15:37
+//  ***********************************************************************
 //  <copyright file="BuiltInFunctions.cs" company="RzR SOFT & TECH">
-//   Copyright © RzR. All rights reserved.
+//      Copyright (c) RzR. All rights reserved.
 //  </copyright>
-// 
-//  <summary>
-//  </summary>
-// ***********************************************************************
+//  <contact>
+//      https://iamrzr.dev/contact
+//  </contact>
+//  <summary></summary>
+//  ***********************************************************************
 
-#region U S A G E S
+#region U S I N G
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DomainCommonExtensions.ArraysExtensions;
 using DomainCommonExtensions.DataTypeExtensions;
 using MathExprEngine.Exceptions;
 
@@ -27,18 +27,14 @@ using MathExprEngine.Exceptions;
 
 namespace MathExprEngine.Helpers
 {
-    /// -------------------------------------------------------------------------------------------------
     /// <summary>
     ///     A build-in functions.
     /// </summary>
-    /// =================================================================================================
     internal static class BuiltInFunctions
     {
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     (Immutable) the functions.
         /// </summary>
-        /// =================================================================================================
         private static readonly IDictionary<string, Func<double[], double>> Functions =
             new Dictionary<string, Func<double[], double>>(StringComparer.OrdinalIgnoreCase)
             {
@@ -66,6 +62,10 @@ namespace MathExprEngine.Helpers
                         if (args.Length != 1)
                             throw new FunctionArgumentException("sqrt", 1);
 
+                        if (args[0] < 0.0)
+                            throw new ExpressionFunctionException(
+                                DefaultMessages.FunctionDomainError.FormatWith("sqrt", args[0]));
+
                         return Math.Sqrt(args[0]);
                     }
                 },
@@ -81,17 +81,19 @@ namespace MathExprEngine.Helpers
                 {
                     "max", args =>
                     {
-                        var max = args.Max();
+                        if (args.Length == 0)
+                            throw FunctionArgumentException.ForMinimumArity("max", 1);
 
-                        return max;
+                        return args.Max();
                     }
                 },
                 {
                     "sum", args =>
                     {
-                        var sum = args.Sum();
+                        if (args.Length == 0)
+                            throw FunctionArgumentException.ForMinimumArity("sum", 1);
 
-                        return sum;
+                        return args.Sum();
                     }
                 },
                 {
@@ -109,51 +111,24 @@ namespace MathExprEngine.Helpers
                         if (args.Length != 2)
                             throw new FunctionArgumentException("mod", 2);
 
+                        if (args[1] == 0.0)
+                            throw new MathRuleEngineException(DefaultMessages.ModuloByZero);
+
                         return args[0] % args[1];
                     }
                 }
             };
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
-        ///     Sets a function.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="func">The function.</param>
-        /// =================================================================================================
-        internal static void SetFunc(string name, Func<double[], double> func)
-        {
-            if (name.IsMissing() || Functions.ContainsKey(name))
-                return;
-
-            Functions.AddIfNotExist(name, func);
-        }
-
-        /// -------------------------------------------------------------------------------------------------
-        /// <summary>
-        ///     Gets a function.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <returns>
-        ///     A function delegate that yields a double.
-        /// </returns>
-        /// =================================================================================================
-        internal static Func<double[], double> GetFunc(string name)
-        {
-            return Functions.GetValueOrDefault(name);
-        }
-
-        /// -------------------------------------------------------------------------------------------------
-        /// <summary>
-        ///     Gets all.
+        ///     Gets a copy of all registered built-in functions. A copy is returned so callers cannot
+        ///     mutate the engine's internal built-in table.
         /// </summary>
         /// <returns>
-        ///     all.
+        ///     A new dictionary containing all built-in functions.
         /// </returns>
-        /// =================================================================================================
         internal static IDictionary<string, Func<double[], double>> GetAll()
         {
-            return Functions ?? new Dictionary<string, Func<double[], double>>();
+            return new Dictionary<string, Func<double[], double>>(Functions, StringComparer.OrdinalIgnoreCase);
         }
     }
 }

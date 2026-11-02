@@ -1,61 +1,88 @@
-﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.MathExprEngine
-//  Author           : RzR
-//  Created On       : 2026-02-02 14:02
+// ***********************************************************************
+//  Assembly          : RzR.Shared.Entity.MathExprEngine
+//  Author            : RzR
+//  Created On        : 2026-09-03 22:09
 // 
 //  Last Modified By : RzR
-//  Last Modified On : 2026-02-02 14:57
-// ***********************************************************************
+//  Last Modified On : 2026-10-31 15:36
+//  ***********************************************************************
 //  <copyright file="ExpressionSyntaxException.cs" company="RzR SOFT & TECH">
-//   Copyright © RzR. All rights reserved.
+//      Copyright (c) RzR. All rights reserved.
 //  </copyright>
-// 
-//  <summary>
-//  </summary>
-// ***********************************************************************
+//  <contact>
+//      https://iamrzr.dev/contact
+//  </contact>
+//  <summary></summary>
+//  ***********************************************************************
 
-#region U S A G E S
+#region U S I N G
 
-using MathExprEngine.Helpers;
 using System;
+using System.Runtime.Serialization;
 using DomainCommonExtensions.DataTypeExtensions;
+using MathExprEngine.Helpers;
 
 #endregion
 
 namespace MathExprEngine.Exceptions
 {
-    /// -------------------------------------------------------------------------------------------------
     /// <summary>
     ///     Exception for signalling expression syntax errors.
     /// </summary>
-    /// <seealso cref="T:Exception"/>
-    /// =================================================================================================
-    public class ExpressionSyntaxException : Exception
+    /// <seealso cref="T:MathExprEngine.Exceptions.MathExprEngineException" />
+    [Serializable]
+    public class ExpressionSyntaxException : MathExprEngineException
     {
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
-        ///     Gets the column.
-        /// </summary>
-        /// <value>
-        ///     The column.
-        /// </value>
-        /// =================================================================================================
-        public int Column { get; }
-
-        /// -------------------------------------------------------------------------------------------------
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="ExpressionSyntaxException"/> class.
+        ///     Initializes a new instance of the <see cref="ExpressionSyntaxException" /> class.
         /// </summary>
         /// <param name="message">The message.</param>
-        /// <param name="column">(Optional) The column.</param>
-        /// =================================================================================================
-        public ExpressionSyntaxException(string message, int column = 0)
-            : base(FormatMessage(message, column))
+        public ExpressionSyntaxException(string message)
+            : this(message, -1, null)
         {
-            Column = column;
         }
 
-        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="ExpressionSyntaxException" /> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="innerException">The inner exception.</param>
+        public ExpressionSyntaxException(string message, Exception innerException)
+            : this(message, -1, innerException)
+        {
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="ExpressionSyntaxException" /> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="column">The column.</param>
+        public ExpressionSyntaxException(string message, int column)
+            : this(message, column, null)
+        {
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="ExpressionSyntaxException" /> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="column">The column.</param>
+        /// <param name="innerException">The inner exception.</param>
+        public ExpressionSyntaxException(string message, int column, Exception innerException)
+            : base(message, FormatMessage(message, column), column, innerException)
+        {
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="ExpressionSyntaxException" /> class for deserialization.
+        /// </summary>
+        /// <param name="info">The serialization info.</param>
+        /// <param name="context">The streaming context.</param>
+        protected ExpressionSyntaxException(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
+
         /// <summary>
         ///     Format message.
         /// </summary>
@@ -64,12 +91,17 @@ namespace MathExprEngine.Exceptions
         /// <returns>
         ///     The formatted message.
         /// </returns>
-        /// =================================================================================================
         private static string FormatMessage(string message, int column)
         {
             return column >= 0
                 ? DefaultMessages.SyntaxExAtColumnWithMessage.FormatWith(column + 1, message)
                 : DefaultMessages.SyntaxEx.FormatWith(message);
+        }
+
+        /// <inheritdoc />
+        internal override MathExprEngineException WithColumn(int column)
+        {
+            return new ExpressionSyntaxException(RawMessage, column, InnerException);
         }
     }
 }
